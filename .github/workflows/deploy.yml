@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Deploy to Production
+      uses: appleboy/ssh-action@master
+      with:
+        host: 54.199.159.101
+        port: 22
+        username: root
+        password: ${{ secrets.AWS_LS_PASSWORD }}
+        script: |
+          whoami
+          killall ssh-agent
+          eval `ssh-agent`
+          ssh-add -D && ssh-add ~/.ssh/github_rsa
+          cd /home/gotojapan.co/public_html
+          git reset --hard HEAD
+          git checkout main
+          git pull origin main
+          composer update
+          php artisan migrate --force
+          php artisan optimize:clear
+          php artisan opcache:clear
+          php artisan opcache:status
+          chmod -R 755 storage
+    - name: Deploy success
+      uses: sarisia/actions-status-discord@v1
+      if: always()
+      with:
+        # webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        title: "Deploy completed"
