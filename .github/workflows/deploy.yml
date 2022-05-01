@@ -14,7 +14,7 @@ jobs:
       with:
         host: 54.199.159.101
         port: 22
-        username: root
+        username: ubuntu
         password: ${{ secrets.AWS_LS_PASSWORD }}
         script: |
           whoami
