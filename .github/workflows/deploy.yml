@@ -18,11 +18,12 @@ jobs:
         key: ${{ secrets.AWS_LS_PASSWORD }}
         script: |
           whoami
+          sudo -i
+          cd ../home/gotojapan.co/public_html
           ls -al
           killall ssh-agent
           eval `ssh-agent`
           ssh-add -D && ssh-add ~/.ssh/github_rsa
-          cd /home/gotojapan.co/public_html
           git reset --hard HEAD
           git checkout main
           git pull origin main
@@ -32,9 +33,9 @@ jobs:
           php artisan opcache:clear
           php artisan opcache:status
           chmod -R 755 storage
-    # - name: Deploy success
-    #   uses: sarisia/actions-status-discord@v1
-    #   if: always()
-    #   with:
-    #     # webhook: ${{ secrets.DISCORD_WEBHOOK }}
-    #     title: "Deploy completed"
+    - name: Deploy success
+      uses: sarisia/actions-status-discord@v1
+      if: always()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        title: "Deploy completed"
