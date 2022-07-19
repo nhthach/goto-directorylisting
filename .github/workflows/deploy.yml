@@ -21,9 +21,8 @@ jobs:
           sudo -i
           cd /var/www/html/
           ls -al
-          killall ssh-agent
           eval `ssh-agent -s`
-       
+          killall ssh-agent
     - name: Deploy success
       uses: sarisia/actions-status-discord@v1
       if: always()
