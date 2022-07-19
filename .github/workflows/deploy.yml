@@ -23,16 +23,7 @@ jobs:
           ls -al
           killall ssh-agent
           eval `ssh-agent -s`
-          ssh-add -D && ssh-add ~/.ssh/git_ci
-          git reset --hard HEAD
-          git checkout main
-          git pull origin main
-          composer update
-          php artisan migrate --force
-          php artisan optimize:clear
-          php artisan opcache:clear
-          php artisan opcache:status
-          chmod -R 755 storage
+       
     - name: Deploy success
       uses: sarisia/actions-status-discord@v1
       if: always()
