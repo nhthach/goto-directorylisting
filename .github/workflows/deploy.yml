@@ -12,7 +12,7 @@ jobs:
     - name: Deploy to Production
       uses: appleboy/ssh-action@master
       with:
-        host: 54.199.159.101
+        host: ec2-52-194-223-217.ap-northeast-1.compute.amazonaws.com
         port: 22
         username: ubuntu
         key: ${{ secrets.AWS_EC2_CI }}
